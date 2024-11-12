@@ -11,14 +11,6 @@ export default async function handler(
 ) {
   const { code } = request.query
 
-  // Debug log to check environment variables
-  console.log('Environment check:', {
-    hasClientId: !!CLIENT_ID,
-    hasClientSecret: !!CLIENT_SECRET,
-    actualClientId: CLIENT_ID,  // Be careful with logging secrets in production
-    actualClientSecret: CLIENT_SECRET?.slice(0, 4) + '...'  // Only log first 4 chars
-  })
-
   if (!code) {
     return response.status(400).json({ error: 'Code parameter is required' })
   }
@@ -39,16 +31,15 @@ export default async function handler(
 
     const data = await tokenResponse.json()
 
-    console.log("data", data)
     if (data.error) {
       console.log(data.error);
       return response.redirect(`/auth?error=${data.error_description || 'Authentication failed'}`)
 
     }
 
-    return response.redirect(`http://localhost:5173/auth?token=${data.access_token}`)
+    return response.redirect(`${process.env.DOMAIN}/auth?token=${data.access_token}`)
   } catch (error) {
     console.error('Auth error:', error)
-    return response.redirect('/auth?error=Authentication failed')
+    return response.redirect(`${process.env.DOMAIN}/auth?error=Authentication failed`)
   }
 }
