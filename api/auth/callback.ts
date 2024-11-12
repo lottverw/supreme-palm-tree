@@ -15,7 +15,6 @@ export default async function handler(
     return response.status(400).json({ error: 'Code parameter is required' })
   }
 
-  console.log('BULLE');
   try {
     const tokenResponse = await fetch(`https://github.com/login/oauth/access_token`, {
       method: 'POST',
@@ -38,9 +37,9 @@ export default async function handler(
 
     }
 
-    return response.redirect(`${process.env.DOMAIN}/auth?token=${data.access_token}`)
+    return response.redirect(`/auth?token=${data.access_token}`)
   } catch (error) {
     console.error('Auth error:', error)
-    return response.redirect(`${process.env.DOMAIN}/auth?error=Authentication failed`)
+    return response.redirect(`/auth?error=Authentication failed`)
   }
 }
