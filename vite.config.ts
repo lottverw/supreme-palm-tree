@@ -13,8 +13,11 @@ export default defineConfig({
     vueDevTools(),
 
   ],
+  server: {
+    port: 3000,
+  },
   build: {
-    outDir: 'dist' 
+    outDir: 'dist'
   },
   css: {
     postcss: {
