@@ -15,6 +15,7 @@ export default async function handler(
     return response.status(400).json({ error: 'Code parameter is required' })
   }
 
+  console.log('BULLE');
   try {
     const tokenResponse = await fetch(`https://github.com/login/oauth/access_token`, {
       method: 'POST',
