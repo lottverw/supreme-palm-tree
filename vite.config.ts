@@ -13,6 +13,9 @@ export default defineConfig({
     vueDevTools(),
 
   ],
+  build: {
+    outDir: 'dist' 
+  },
   css: {
     postcss: {
       plugins: [tailwind(), autoprefixer()],
