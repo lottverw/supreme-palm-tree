@@ -5,7 +5,7 @@ export function useCommits(owner: string, repository: string) {
     // todo state management
     const token = localStorage.getItem('github_token');
 
-    const { data } = useQuery({
+    const { data , isLoading, error } = useQuery({
         queryKey: ["commits", repository],
         queryFn: async () => {
             const response = await fetch(`https://api.github.com/repos/${owner}/${repository}/commits`,
@@ -27,5 +27,5 @@ export function useCommits(owner: string, repository: string) {
     const commits = computed(() => data.value || []);
 
 
-    return { commits };
+    return { commits , isLoading, error };
 }

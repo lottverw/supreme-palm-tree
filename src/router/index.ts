@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
 import RepositoriesView from '../views/RepositoriesView.vue'
 import AuthView from '@/views/AuthView.vue'
 import CommitView from '@/views/CommitView.vue'
@@ -11,21 +10,24 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: AuthView,
+      meta: { breadcrumb: 'Home' },
     },
     {
       path: '/repositories',
       name: 'Repositories',
-      component: RepositoriesView
+      component: RepositoriesView,
+      meta: { breadcrumb: 'Repostitories' },
     },
     {
       path: '/auth',
       name: 'Auth',
-      component: AuthView
+      component: AuthView,
     },
     {
-      path: '/repository/:repo/:owner/commits',
+      path: '/repository/:repo/commits',
       name: 'Commits',
-      component: CommitView
+      component: CommitView,
+      meta: { breadcrumb: 'Commits' },
     }
   ],
 })

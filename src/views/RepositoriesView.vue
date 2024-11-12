@@ -1,24 +1,59 @@
 <script setup lang="ts">
-import { useAuth } from '@/composables/useAuth';
-import { useRepositories } from '@/composables/useRepositories';
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
+import { useRepositoryStore } from '@/stores/repositoryStore';
+import { computed } from 'vue';
 
-const { repositories, isLoading, error } = useRepositories();
-
+const { isLoading, error } = useRepositoryStore();
+const repositories = computed(() => useRepositoryStore().repositories)
 
 </script>
 <template>
   <div>
     <div v-if="isLoading">Loading repositories...</div>
     <div v-else-if="error">{{ error.message }}</div>
-    <ul v-else>
-      <li v-for="repo in repositories" :key="repo.id">
-        <RouterLink :to="{ name: 'Commits', params: { repo: repo.name, owner: repo.owner.login } }">
-          View commits</RouterLink>
-        <a :href="repo.html_url" target="_blank">open in new tab{{ repo.name }}</a>
-        <p>{{ repo.description }}</p>
-      </li>
-    </ul>
+    <Table v-else>
+      <TableCaption>Public repositories</TableCaption>
+      <TableHeader>
+        <TableRow>
+          <TableHead>
+            Name
+          </TableHead>
+          <TableHead>
+            Description
+          </TableHead>
+          <TableHead>
+            Commits
+          </TableHead>
+          <TableHead>
+            Language
+          </TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        <TableRow v-for="repo in repositories" :key="repo.id">
+          <TableCell>
+            {{ repo.name }}
+          </TableCell>
+          <TableCell>
+            {{ repo.description }}
+          </TableCell>
+          <TableCell>
+            <RouterLink :to="{ name: 'Commits', params: { repo: repo.name } }">
+              View commits</RouterLink>
+          </TableCell>
+          <TableCell>
+            {{ repo.language }}
+          </TableCell>
+        </TableRow>
+      </TableBody>
+    </Table>
   </div>
 </template>
-
-<style></style>

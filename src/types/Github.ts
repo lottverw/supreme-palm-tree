@@ -21,4 +21,6 @@ interface Repository {
     name: string;
     description: string | null;
     owner: Owner;
+    language: string;
+
 }
