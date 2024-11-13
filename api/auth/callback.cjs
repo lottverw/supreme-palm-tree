@@ -8,10 +8,10 @@ const path = require('path')
 dotenv.config({ path: path.resolve(process.cwd(), '.env.local') })
 const CLIENT_ID = process.env.GITHUB_CLIENT_ID
 const CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET
-
+const BASE_URL = process.env.BASE_URL;
 module.exports = async function handler(request, response) {
   const { code } = request.query
-  console.log('het werkt')
+
   if (!code) {
     return response.status(400).json({ error: 'Code parameter is required' })
   }
@@ -38,7 +38,7 @@ module.exports = async function handler(request, response) {
       return response.redirect(`/auth?error=${data.error_description || 'Authentication failed'}`)
     }
 
-    return response.redirect(`/auth?token=${data.access_token}`)
+    return response.redirect(`${BASE_URL}?token=${data.access_token}`)
   } catch (error) {
     console.error('Auth error:', error)
     //  return response.redirect(`/auth?error=Authentication failed`)
