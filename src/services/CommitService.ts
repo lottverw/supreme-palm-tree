@@ -1,6 +1,6 @@
 export const CommitService = {
-  async getCommits(selectedRepository: Repository) {
-    const response = await fetch(`https://api.github.com/repos/${selectedRepository.owner.login}/${selectedRepository.name}/commits?sort=desc`);
+  async getCommits(selectedRepository: Repository, perPage: number, page: number) {
+    const response = await fetch(`https://api.github.com/repos/${selectedRepository.owner.login}/${selectedRepository.name}/commits?sort=desc&per_page=${perPage}&page=${page}`);
 
     if (!response.ok) {
       const errorData = await response.json();
