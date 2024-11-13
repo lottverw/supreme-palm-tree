@@ -1,8 +1,41 @@
 ## Project Setup
 
+First, you need to create an OAuth application in GitLab.
+
+    1. Go to your GitLab account.
+    2. Navigate to User Settings (click your profile picture at the top right) → Applications.
+    3. Create a new application by filling in the form:
+        Name: Name of your app.
+        Homepage app: http://localhost:3000/
+        Authorization callback URL: http://localhost:3001/api/auth/callback
+
+    Once the application is created, GitLab will provide you with:
+        Client ID: Unique ID for your application.
+        Client Secret: Secret key for authenticating your app.
+
+
+``` env
+GITHUB_CLIENT_ID=
+GITHUB_CLIENT_SECRET=
+VITE_GITHUB_CLIENT_ID=
+VITE_GITHUB_CLIENT_SECRET=
+BASE_URL=http://localhost:3001
+```
+
 ```sh
 npm install
 ```
+
+### run app 
+```sh
+npm run dev
+```
+
+seperate tab 
+```sh
+vercel dev
+```
+After running this command versel wil ask you to login. You can do so with the github account.
 
 ## Run test
 
