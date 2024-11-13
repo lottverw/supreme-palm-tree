@@ -13,7 +13,7 @@ export const useCommitStore = defineStore('useCommitStore', () => {
   const error = ref<Error | null>(null);
   const filteredCommits = ref<Commit[]>([]);
   const selectedRepository = computed(() => useRepositoryStore().selectedRepository);
-  const perPage = 5;
+  const perPage = 20;
   const page = ref<number>(1);
   const hasMore = ref(false);
 

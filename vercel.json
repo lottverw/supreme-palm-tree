@@ -4,6 +4,10 @@
     {
       "src": "api/**/*.cjs",
       "use": "@vercel/node"
-    }
+    },
+    {
+        "src": "dist/**/*",
+        "use": "@vercel/static"
+      }
   ]
 }

@@ -36,7 +36,7 @@ watch(() => props.hasMore, (newVal: boolean) => {
 
 
 <template>
-  <div ref="wrapper" class="overflow-scroll h-46 bg-slate-400">
+  <div ref="wrapper" class="overflow-scroll h-46">
     <slot></slot>
     <div class="text-center" ref="loadMore" v-if="hasMore">
       <span class="mx-auto inline-block">
