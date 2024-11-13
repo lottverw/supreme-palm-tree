@@ -23,25 +23,26 @@ const commitStore = useCommitStore();
 const searchParam = ref('');
 const repository = computed(() => repositoryStore.selectedRepository);
 const filteredCommits = computed(() => commitStore.filteredCommits);
-const { isLoading, hasMore } = commitStore;
+const hasMore = computed(() => commitStore.hasMore);
 
 watchEffect(() => {
   const repoName = route.params.repo as string;
   if (repoName) {
+    commitStore.clearCommits();
     repositoryStore.setSelectedRepository(repoName);
   }
 });
 
-const handleSearch = () => {
+const handleSearch = (event: Event) => {
+  searchParam.value = (event.target as HTMLInputElement).value;
   commitStore.getCommitsByQueryString(searchParam.value);
 };
 
+
 </script>
-
-
 <template>
-  <Header>Commits for repostory: {{ repository?.name }}</Header>
-  <Input placeholder="Search message" @input="handleSearch" v-model="searchParam" class="mb-3" />
+  <Header>Commits for repostory: {{ repository?.name }} {{  hasMore }}</Header>
+  <Input placeholder="Search message" @input="handleSearch" class="mb-3" />
 
   <InfiniteScrollWrapper :has-more="hasMore" @on-load-more="commitStore.loadMoreCommits">
     <Table>
@@ -70,7 +71,7 @@ const handleSearch = () => {
             {{ commit.commit.message }}
           </TableCell>
           <TableCell>
-            {{ commit?.author.login || 'unknown' }}
+            {{ commit?.author?.login || 'unknown' }}
           </TableCell>
         </TableRow>
       </TableBody>

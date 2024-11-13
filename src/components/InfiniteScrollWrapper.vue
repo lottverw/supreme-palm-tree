@@ -1,44 +1,48 @@
 <script setup lang="ts">
-import { ArrowPathIcon } from '@heroicons/vue/16/solid';
 import { SparklesIcon } from 'lucide-vue-next';
-import { onMounted, ref } from 'vue';
-
+import { onMounted, ref, watch } from 'vue';
+const wrapper = ref();
 const emit = defineEmits(['onLoadMore']);
 const loadMore = ref<HTMLDivElement | null>(null)
-
+const observer = ref<IntersectionObserver | null>(null)
 const props = defineProps<{
   hasMore: boolean
 }>();
 
 
 onMounted(() => {
-  const observer = new IntersectionObserver((entries) => {
+  observer.value = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         emit("onLoadMore")
       }
     })
-  },  { threshold: 0.1 })
+  }, { root: wrapper.value, rootMargin: "20px", threshold: 0.1 })
 
   if (loadMore.value) {
-    observer.observe(loadMore.value)
+    observer.value.observe(loadMore.value)
   }
 
-  if (!props.hasMore) {
-    observer.disconnect();
-  }
+})
 
+watch(() => props.hasMore, (newVal: boolean) => {
+
+  if (observer.value && !newVal) {
+    observer.value.disconnect();
+  }
 })
 
 </script>
 
 
 <template>
-  <slot></slot>
-  <div class="text-center" ref="loadMore" v-if="hasMore">
-    <span class="mx-auto inline-block">
-
-      <SparklesIcon class="size-3 text-purple-500 animate-pulse"></SparklesIcon>
-    </span>
+  <div ref="wrapper" class="overflow-scroll h-46 bg-slate-400">
+    <slot></slot>
+    <div class="text-center" ref="loadMore" v-if="hasMore">
+      <span class="mx-auto inline-block">
+        <SparklesIcon class="size-3 text-purple-500 animate-pulse"></SparklesIcon>
+      </span>
+    </div>
   </div>
+
 </template>

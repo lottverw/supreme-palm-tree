@@ -13,18 +13,19 @@ export const useCommitStore = defineStore('useCommitStore', () => {
   const error = ref<Error | null>(null);
   const filteredCommits = ref<Commit[]>([]);
   const selectedRepository = computed(() => useRepositoryStore().selectedRepository);
-  const perPage = 20;
+  const perPage = 5;
   const page = ref<number>(1);
-  const hasMore = ref(true);
+  const hasMore = ref(false);
 
-  const { data, isLoading: queryLoading, error: queryError, isFetchingNextPage } = useQuery({
+  const { isLoading: queryLoading, error: queryError, isFetchingNextPage } = useQuery({
     queryKey: ["commits", selectedRepository, page],
     queryFn: () => {
       if (!selectedRepository.value) {
         return;
       }
 
-      if(!hasMore.value) {
+      console.log("has+more", hasMore.value, "page", page.value)
+      if (!hasMore.value && page.value > 1) {
         return
       }
       return CommitService.getCommits(selectedRepository.value, perPage, page.value)
@@ -32,8 +33,19 @@ export const useCommitStore = defineStore('useCommitStore', () => {
     enabled: isAuthenticated,
     onSuccess: (data: Commit[]) => {
       hasMore.value = data.length > 0 && data.length === perPage;
+      console.log("updated has  more", hasMore.value)
       commits.value = [...commits.value, ...data];
-      filteredCommits.value = [...commits.value, ...data];
+      filteredCommits.value = [
+        ...filteredCommits.value,
+        ...data.reduce((acc, commit) => {
+          // Check if the commit with the same 'sha' already exists in the accumulator
+          if (!acc.some(existingCommit => existingCommit.sha === commit.sha)) {
+            acc.push(commit); // Add the commit if it's unique
+          }
+          return acc;
+        }, [] as typeof data)
+      ];
+
     },
     refetchOnWindowFocus: false,
     retry: false
@@ -45,7 +57,7 @@ export const useCommitStore = defineStore('useCommitStore', () => {
 
   const getCommitsByQueryString = (queryString: string) => {
     if (queryString.length === 0) {
-      filteredCommits.value = commits.value;
+      filteredCommits.value = [...commits.value];
       return;
     }
 
@@ -57,6 +69,10 @@ export const useCommitStore = defineStore('useCommitStore', () => {
     page.value += 1;
   }
 
+  const clearCommits = () => {
+    commits.value = [];
+    filteredCommits.value = [];
+  }
   return {
     commits,
     isLoading,
@@ -64,6 +80,7 @@ export const useCommitStore = defineStore('useCommitStore', () => {
     getCommitsByQueryString,
     filteredCommits,
     loadMoreCommits,
-    hasMore
+    hasMore,
+    clearCommits
   };
 })
