@@ -2,53 +2,44 @@ import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
 import { useQuery } from 'vue-query';
 import { useAuthStore } from './authStore';
+import { RepositoryService } from '@/services/RepositoryService';
 
 export const useRepositoryStore = defineStore('useRepositoryStore', () => {
-  const repositories = ref<Repository[]>([])
-  const isLoading = ref(false);
-  const error = ref<Error | null>(null);
   const { isAuthenticated, token } = useAuthStore();
 
+  const repositories = ref<Repository[]>([])
+  const selectedRepository = ref<Repository>();
+  const isLoading = ref(false);
+  const error = ref<Error | null>(null);
+
   const { data, isLoading: queryLoading, error: queryError } = useQuery({
-    queryKey: ['repositories', token],
+    queryKey: ['repositories'],
     queryFn: async () => {
-
-      if (!token) {
-        throw new Error('Unable to authenticate');
-      }
-
-      const response = await fetch(`https://api.github.com/user/repos?sort=pushed`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to fetch repositories');
-      }
-
-      return response.json()
+      if(!token) return [];
+      return RepositoryService.getRepositories(token);
     },
     enabled: computed(() => !!isAuthenticated),
     retry: false,
     onSuccess: (data: Repository[]) => {
       repositories.value = data;
-    },
+    }
+
   })
 
   isLoading.value = queryLoading;
   error.value = queryError;
 
-  const getRepoByName = (repoName: string) => {
-    return repositories.value.find(repo => repo.name === repoName);
+  const setSelectedRepository = (repoName: string) => {
+    console.log('repo name setSelectedRepository', repoName)
+    selectedRepository.value = RepositoryService.getRepositoryByName(repositories.value, repoName);
   };
+
 
   return {
     repositories: computed(() => data.value || []),
     isLoading,
     error,
-    getRepoByName
+    setSelectedRepository,
+    selectedRepository
   }
 })
