@@ -43,7 +43,7 @@ const handleSearch = (event: Event) => {
 </script>
 <template>
   <Header>{{ repository?.name.toUpperCase() }} Commits</Header>
-  <p class="mb-4 text-sm italic">{{repository.description}}</p>
+  <p class="mb-4 text-sm italic">{{repository?.description}}</p>
   <div class="flex items-center border-b-2 ">
     <MagnifyingGlassIcon class="size-6 mr-3 mb-3 text-purple-500"></MagnifyingGlassIcon>
     <Input placeholder="Search message" @input="handleSearch" class="mb-3" />
