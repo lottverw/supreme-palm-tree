@@ -2,9 +2,8 @@
 const dotenv = require('dotenv')
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const path = require('path')
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const fetch = require('node-fetch');
 
+//const fetch = require('node-fetch')
 
 dotenv.config({ path: path.resolve(process.cwd(), '.env.local') })
 const CLIENT_ID = process.env.GITHUB_CLIENT_ID
@@ -33,6 +32,7 @@ module.exports = async function handler(request, response) {
 
     const data = await tokenResponse.json()
 
+    console.log('data', data)
     if (data.error) {
       console.log(data.error)
       return response.redirect(`/auth?error=${data.error_description || 'Authentication failed'}`)
@@ -41,6 +41,6 @@ module.exports = async function handler(request, response) {
     return response.redirect(`/auth?token=${data.access_token}`)
   } catch (error) {
     console.error('Auth error:', error)
-    return response.redirect(`${process.env.DOMAIN}/auth?error=Authentication failed`)
+    //  return response.redirect(`/auth?error=Authentication failed`)
   }
 }
