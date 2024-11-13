@@ -20,6 +20,7 @@
     "clsx": "^2.1.1",
     "dotenv": "^16.4.5",
     "lucide-vue-next": "^0.456.0",
+    "node-fetch": "^3.3.2",
     "pinia": "^2.2.6",
     "radix-vue": "^1.9.9",
     "tailwind-merge": "^2.5.4",
