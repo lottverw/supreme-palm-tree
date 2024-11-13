@@ -39,6 +39,7 @@ describe('InfiniteScrollWrapper', () => {
 
   test('emits "onLoadMore" when scrolled to the bottom', async () => {
     const mockIntersectionEntry = { isIntersecting: true };
+    // @ts-ignore
     const callback = global.IntersectionObserver.mock.calls[0][0];
     callback([mockIntersectionEntry]); // Manually trigger the observer callback
 
@@ -52,6 +53,7 @@ describe('InfiniteScrollWrapper', () => {
       props: { hasMore: true }, // Start with `hasMore` as true
     });
 
+    // @ts-ignore
     const spy = vi.spyOn(wrapper.vm.observer, "disconnect");
 
     // Change `hasMore` to false and wait for the effect
@@ -65,6 +67,7 @@ describe('InfiniteScrollWrapper', () => {
 
     // Simulate no intersection (not at the bottom)
     const mockIntersectionEntry = { isIntersecting: false };
+    // @ts-ignore
     const callback = global.IntersectionObserver.mock.calls[0][0];
     callback([mockIntersectionEntry]); // Manually trigger the observer callback
     const emittedEvents = wrapper.emitted('onLoadMore');
