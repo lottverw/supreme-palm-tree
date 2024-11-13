@@ -13,6 +13,7 @@ const props = defineProps<{
 onMounted(() => {
   observer.value = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
+      console.log("entry", entry)
       if (entry.isIntersecting) {
         emit("onLoadMore")
       }

@@ -32,15 +32,12 @@ module.exports = async function handler(request, response) {
 
     const data = await tokenResponse.json()
 
-    console.log('data', data)
     if (data.error) {
-      console.log(data.error)
       return response.redirect(`/auth?error=${data.error_description || 'Authentication failed'}`)
     }
 
     return response.redirect(`${BASE_URL}?token=${data.access_token}`)
   } catch (error) {
-    console.error('Auth error:', error)
-    //  return response.redirect(`/auth?error=Authentication failed`)
+    return response.redirect(`/auth?error=Authentication failed`)
   }
 }

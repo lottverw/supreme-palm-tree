@@ -14,8 +14,6 @@ export const RepositoryService = {
     return response.json()
   },
   getRepositoryByName(repositories: Repository[], repositoryName: string) {
-    console.log('repo name getRepositoryByName', repositories, repositoryName)
-
     return repositories.find(repository => repository.name === repositoryName);
   }
 }

@@ -30,7 +30,6 @@ export const useRepositoryStore = defineStore('useRepositoryStore', () => {
   error.value = queryError;
 
   const setSelectedRepository = (repoName: string) => {
-    console.log('repo name setSelectedRepository', repoName)
     selectedRepository.value = RepositoryService.getRepositoryByName(repositories.value, repoName);
   };
 
