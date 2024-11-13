@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { RouterView, useRoute } from 'vue-router'
+import { RouterView } from 'vue-router'
 import Sidebar from './components/Sidebar.vue';
 import { useAuthStore } from './stores/authStore';
 import { computed } from 'vue';
@@ -7,9 +7,6 @@ const authStore = useAuthStore();
 
 const isAuthenticated = computed(() => authStore.isAuthenticated);
 const user = computed(() => authStore.user)
-
-console.log(isAuthenticated, user)
-
 </script>
 
 <template>

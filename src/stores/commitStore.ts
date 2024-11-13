@@ -14,7 +14,7 @@ export const useCommitStore = defineStore('useCommitStore', () => {
   const filteredCommits = ref<Commit[]>([]);
   const selectedRepository = computed(() => useRepositoryStore().selectedRepository);
   const perPage = 20;
-  const page = ref<number>(1);
+  const page = ref<number>(0);
   const hasMore = ref(false);
 
   const { isLoading: queryLoading, error: queryError, isFetchingNextPage } = useQuery({
@@ -24,16 +24,11 @@ export const useCommitStore = defineStore('useCommitStore', () => {
         return;
       }
 
-      console.log("has+more", hasMore.value, "page", page.value)
-      if (!hasMore.value && page.value > 1) {
-        return
-      }
       return CommitService.getCommits(selectedRepository.value, perPage, page.value)
     },
     enabled: isAuthenticated,
     onSuccess: (data: Commit[]) => {
       hasMore.value = data.length > 0 && data.length === perPage;
-      console.log("updated has  more", hasMore.value)
       commits.value = [...commits.value, ...data];
       filteredCommits.value = [
         ...filteredCommits.value,
@@ -48,7 +43,7 @@ export const useCommitStore = defineStore('useCommitStore', () => {
 
     },
     refetchOnWindowFocus: false,
-    retry: false
+    retry: true
   })
 
   isLoading.value = queryLoading;

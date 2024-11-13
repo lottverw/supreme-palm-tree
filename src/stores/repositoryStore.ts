@@ -6,7 +6,6 @@ import { RepositoryService } from '@/services/RepositoryService';
 
 export const useRepositoryStore = defineStore('useRepositoryStore', () => {
   const { isAuthenticated, token } = useAuthStore();
-
   const repositories = ref<Repository[]>([])
   const selectedRepository = ref<Repository>();
   const isLoading = ref(false);

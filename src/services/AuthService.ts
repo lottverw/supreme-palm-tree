@@ -20,7 +20,7 @@ export const AuthService = {
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.message || 'Failed to fetch user data');
+     console.error(errorData.message || 'Failed to fetch user data');
     }
     return response.json()
   }

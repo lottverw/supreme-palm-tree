@@ -15,6 +15,7 @@ import {
 import { Input } from '@/components/ui/input'
 import Header from '@/components/Header.vue';
 import InfiniteScrollWrapper from '@/components/InfiniteScrollWrapper.vue';
+import { MagnifyingGlassIcon } from '@heroicons/vue/16/solid';
 
 const route = useRoute();
 const repositoryStore = useRepositoryStore();
@@ -41,8 +42,12 @@ const handleSearch = (event: Event) => {
 
 </script>
 <template>
-  <Header>Commits for repostory: {{ repository?.name }} {{  hasMore }}</Header>
-  <Input placeholder="Search message" @input="handleSearch" class="mb-3" />
+  <Header>{{ repository?.name.toUpperCase() }} Commits</Header>
+  <p class="mb-4 text-sm italic">{{repository.description}}</p>
+  <div class="flex items-center border-b-2 ">
+    <MagnifyingGlassIcon class="size-6 mr-3 mb-3 text-purple-500"></MagnifyingGlassIcon>
+    <Input placeholder="Search message" @input="handleSearch" class="mb-3" />
+  </div>
 
   <InfiniteScrollWrapper :has-more="hasMore" @on-load-more="commitStore.loadMoreCommits">
     <Table>
@@ -64,8 +69,7 @@ const handleSearch = (event: Event) => {
         <TableRow v-for="(commit, idx) in filteredCommits" :key="commit.sha"
           :ref="idx === filteredCommits.length - 1 ? 'loadMore' : ''">
           <TableCell>
-            {{ idx }}
-            #{{ commit.sha.substring(0, 5) }}
+            #{{ commit.sha.substring(0, 7) }}
           </TableCell>
           <TableCell>
             {{ commit.commit.message }}

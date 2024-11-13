@@ -21,7 +21,7 @@ const repositories = computed(() => useRepositoryStore().repositories)
     <Header>Repositories</Header>
     <div v-if="isLoading">Loading repositories...</div>
     <div v-else-if="error">{{ error.message }}</div>
-    <Table v-else>
+    <Table v-else-if="repositories.length > 0">
       <TableCaption>Public repositories</TableCaption>
       <TableHeader>
         <TableRow>
@@ -45,9 +45,9 @@ const repositories = computed(() => useRepositoryStore().repositories)
             {{ repo.name }}
           </TableCell>
           <TableCell>
-            {{ repo.description }}
+            {{ repo.description || "No description" }}
           </TableCell>
-          <TableCell>
+          <TableCell class="underline text-purple-500">
             <RouterLink :to="{ name: 'Commits', params: { repo: repo.name } }">
               View commits</RouterLink>
           </TableCell>
@@ -57,5 +57,6 @@ const repositories = computed(() => useRepositoryStore().repositories)
         </TableRow>
       </TableBody>
     </Table>
+    <div v-else><p>No repositories found.</p></div>
   </div>
 </template>

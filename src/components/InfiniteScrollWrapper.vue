@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { SparklesIcon } from 'lucide-vue-next';
+import { SparklesIcon } from '@heroicons/vue/16/solid';
 import { onMounted, ref, watch } from 'vue';
 const wrapper = ref();
 const emit = defineEmits(['onLoadMore']);
@@ -13,12 +13,11 @@ const props = defineProps<{
 onMounted(() => {
   observer.value = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
-      console.log("entry", entry)
       if (entry.isIntersecting) {
         emit("onLoadMore")
       }
     })
-  }, { root: wrapper.value, rootMargin: "20px", threshold: 0.1 })
+  }, {rootMargin: "20px", threshold: 0.1 })
 
   if (loadMore.value) {
     observer.value.observe(loadMore.value)
@@ -27,7 +26,6 @@ onMounted(() => {
 })
 
 watch(() => props.hasMore, (newVal: boolean) => {
-
   if (observer.value && !newVal) {
     observer.value.disconnect();
   }
@@ -37,11 +35,11 @@ watch(() => props.hasMore, (newVal: boolean) => {
 
 
 <template>
-  <div ref="wrapper" class="overflow-scroll h-46">
+  <div ref="wrapper" class="h-full">
     <slot></slot>
-    <div class="text-center" ref="loadMore" v-if="hasMore">
+    <div class="text-center" ref="loadMore">
       <span class="mx-auto inline-block">
-        <SparklesIcon class="size-3 text-purple-500 animate-pulse"></SparklesIcon>
+        <SparklesIcon v-if="hasMore" class="size-4 text-purple-500 animate-pulse"></SparklesIcon>
       </span>
     </div>
   </div>
