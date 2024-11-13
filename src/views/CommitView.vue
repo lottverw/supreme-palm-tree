@@ -13,18 +13,20 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { Input } from '@/components/ui/input'
+import Header from '@/components/Header.vue';
 const route = useRoute();
 const repositoryStore = useRepositoryStore();
 const commitStore = useCommitStore();
 
 const searchParam = ref('');
 const repository = computed(() => repositoryStore.selectedRepository);
-const commits = computed(() => commitStore.filteredCommits)
+const filteredCommits = computed(() => commitStore.filteredCommits);
+const { isLoading } = commitStore;
 
 watchEffect(() => {
   const repoName = route.params.repo as string;
   if (repoName) {
-    repositoryStore.setSelectedRepository(repoName); // Stel de repository in bij verandering
+    repositoryStore.setSelectedRepository(repoName);
   }
 });
 
@@ -35,7 +37,7 @@ const handleSearch = () => {
 
 
 <template>
-  <h1 class="text-xl mb-4">Commits for repostory: {{ repository?.name }}</h1>
+  <Header>Commits for repostory: {{ repository?.name }}</Header>
   <Input placeholder="Search message" @input="handleSearch" v-model="searchParam" class="mb-3" />
   <Table>
     <TableCaption v-if="searchParam">Only commits that match {{ searchParam }} are begin shown</TableCaption>
@@ -52,16 +54,17 @@ const handleSearch = () => {
         </TableHead>
       </TableRow>
     </TableHeader>
-    <TableBody v-if="commits.length > 0">
-      <TableRow v-for="commit in commits" :key="commit.sha">
+    <TableBody v-if="filteredCommits">
+      <TableRow v-for="(commit , key) in filteredCommits" :key="commit.sha">
         <TableCell>
+          {{ key  }}
           #{{ commit.sha.substring(0, 5) }}
         </TableCell>
         <TableCell>
           {{ commit.commit.message }}
         </TableCell>
         <TableCell>
-          {{ commit.author.login }}
+          {{ commit?.author.login || 'unknown' }}
         </TableCell>
       </TableRow>
     </TableBody>

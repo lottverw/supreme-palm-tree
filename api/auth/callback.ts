@@ -40,6 +40,6 @@ export default async function handler(
     return response.redirect(`/auth?token=${data.access_token}`)
   } catch (error) {
     console.error('Auth error:', error)
-    return response.redirect(`/auth?error=Authentication failed`)
+    return response.redirect(`${process.env.DOMAIN}/auth?error=Authentication failed`)
   }
 }

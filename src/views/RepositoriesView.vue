@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import Header from '@/components/Header.vue';
 import {
   Table,
   TableBody,
@@ -17,6 +18,7 @@ const repositories = computed(() => useRepositoryStore().repositories)
 </script>
 <template>
   <div>
+    <Header>Repositories</Header>
     <div v-if="isLoading">Loading repositories...</div>
     <div v-else-if="error">{{ error.message }}</div>
     <Table v-else>
